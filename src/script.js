@@ -8,6 +8,7 @@ import * as dat from 'dat.gui'
 const loader = new THREE.TextureLoader()
 const heightImg = loader.load('/height.png')
 const textureImg = loader.load('/texture.jpg')
+const alphaImg = loader.load('/alpha.png')
 
 // Debug
 const gui = new dat.GUI()
@@ -21,15 +22,20 @@ const scene = new THREE.Scene()
 // Objects
 const width = 3;
 const height = 3;
-const widthSegments = 64;
-const heightSegments = 64;
+const widthSegments = 1500;
+const heightSegments = 1500;
 const geometry = new THREE.PlaneBufferGeometry(width, height, widthSegments, heightSegments)
 
 // Materials
 const material = new THREE.MeshStandardMaterial({
 	color: 'gray',
 	map: textureImg,
-	displacementMap: heightImg
+	displacementMap: heightImg,
+	displacementScale: -0.5,
+	alphaMap: alphaImg,
+	alphaScale: 2,
+	transparent: true,
+	depthTest: false
 })
 
 // Mesh
@@ -38,7 +44,7 @@ scene.add(plane);
 plane.rotation.x = 181
 
 // Lights
-const pointLight = new THREE.PointLight(0xffffff, 2)
+const pointLight = new THREE.PointLight('#dcdcff', 2)
 pointLight.position.x = 2
 pointLight.position.y = 3
 pointLight.position.z = 4
@@ -47,7 +53,7 @@ gui.add(pointLight.position, 'x')
 gui.add(pointLight.position, 'y')
 gui.add(pointLight.position, 'z')
 
-const col = { color: '#0000ff' }
+const col = { color: '#dcdcff' }
 gui.addColor(col, 'color').onChange(() => {
 	pointLight.color.set(col.color)
 })
@@ -101,20 +107,20 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Animate
  */
+document.addEventListener("mousewheel", animateTerrain)
+let deltaY = 0
+function animateTerrain(event) {
+    camera.position.z += event.deltaY/500;
+}
 
 const clock = new THREE.Clock()
-
 const tick = () =>
 {
-
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
     plane.rotation.z = .25 * elapsedTime
-
-    // Update Orbital Controls
-    // controls.update()
-
+    
     // Render
     renderer.render(scene, camera)
 
