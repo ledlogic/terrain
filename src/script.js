@@ -6,7 +6,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 
 const loader = new THREE.TextureLoader()
-const texture = loader.load('/texture.jpg')
+const heightImg = loader.load('/height.png')
+const textureImg = loader.load('/texture.jpg')
 
 // Debug
 const gui = new dat.GUI()
@@ -27,7 +28,8 @@ const geometry = new THREE.PlaneBufferGeometry(width, height, widthSegments, hei
 // Materials
 const material = new THREE.MeshStandardMaterial({
 	color: 'gray',
-	map: texture
+	map: textureImg,
+	displacementMap: heightImg
 })
 
 // Mesh
@@ -108,7 +110,7 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
-//    sphere.rotation.y = .5 * elapsedTime
+    plane.rotation.z = .25 * elapsedTime
 
     // Update Orbital Controls
     // controls.update()
