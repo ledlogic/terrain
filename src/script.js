@@ -8,7 +8,7 @@ import * as dat from 'dat.gui'
 const loader = new THREE.TextureLoader()
 const heightImg = loader.load('/height.png')
 const textureImg = loader.load('/texture.jpg')
-const alphaImg = loader.load('/alpha.png')
+const alphaImg = loader.load('/alpha-02.png')
 
 // Debug
 const gui = new dat.GUI()
@@ -33,7 +33,7 @@ const material = new THREE.MeshStandardMaterial({
 	displacementMap: heightImg,
 	displacementScale: -0.5,
 	alphaMap: alphaImg,
-	alphaScale: 2,
+	alphaScale: 1,
 	transparent: true,
 	depthTest: false
 })
@@ -66,8 +66,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
