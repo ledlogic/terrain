@@ -108,6 +108,11 @@ for (var x=gridMin;x<gridMax;x+=gridDelta) {
 	}
 }
 
+var mwdelta = 0;
+document.addEventListener( 'mousewheel', (event) => {
+    mwdelta +=event.deltaY;
+});
+
 // Clock
 let cameraRadius = 3
 const clock = new THREE.Clock()
@@ -115,8 +120,9 @@ const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 	
 	var t = 0.125 * elapsedTime
-    camera.position.x = cameraRadius * Math.sin(t)
-    camera.position.z = cameraRadius * Math.cos(t)
+	var zoomRadius = cameraRadius + mwdelta / 500 
+    camera.position.x = zoomRadius * Math.sin(t)
+    camera.position.z = zoomRadius * Math.cos(t)
     camera.rotation.y = t
         
     // Render
