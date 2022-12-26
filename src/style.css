@@ -1,12 +1,9 @@
-*
-{
+* {
     margin: 0;
     padding: 0;
 }
 
-html,
-body
-{
+html,body {
  	background: #000;
     height: 100vh;
 }
@@ -16,10 +13,19 @@ h1 {
 	font-family: "Nesobrite";
 }
 
-.webgl
-{
-    position: fixed;
-    top: 0;
+.webgl {
+    position: absolute;
+    top: 100px;
     left: 0;
-    outline: none;
+    width: 100%;
+}
+.score {
+	font-size: 20px;
+	font-family: "Nesobrite";
+}
+.label-team-0 {
+	color: #606030;
+}
+.label-team-1 {
+	color: #C0A878;	
 }
