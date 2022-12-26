@@ -39,9 +39,9 @@ const material = new THREE.MeshStandardMaterial({
 })
 
 // Mesh
-const plane = new THREE.Mesh(geometry, material);
-scene.add(plane);
-plane.rotation.x = 181
+const planeMesh = new THREE.Mesh(geometry, material);
+scene.add(planeMesh);
+planeMesh.rotation.x = 181
 
 // Lights
 const pointLight = new THREE.PointLight('#dcdcff', 2)
@@ -49,11 +49,6 @@ pointLight.position.x = 3
 pointLight.position.y = 3
 pointLight.position.z = 3
 scene.add(pointLight)
-
-const col = { color: '#dcdcff' }
-gui.addColor(col, 'color').onChange(() => {
-	pointLight.color.set(col.color)
-})
 
 // Sizes
 const sizes = {
@@ -77,9 +72,8 @@ window.addEventListener('resize', () => {
 
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 0
-camera.position.y = 0
-camera.position.z = 3
+camera.position.y = 0.1
+camera.rotation.y = 0.25
 scene.add(camera)
 
 // Renderer
@@ -90,26 +84,20 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-// Animate
-document.addEventListener("mousewheel", animateTerrain)
-let deltaY = 0
-function animateTerrain(event) {
-    camera.position.z += event.deltaY/500;
-}
-
 // Clock
+let cameraRadius = 1.5
 const clock = new THREE.Clock()
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
-
-    // Update objects
-    plane.rotation.z = .25 * elapsedTime
-    
+	
+    camera.position.x = cameraRadius * Math.sin(0.125 * elapsedTime)
+    camera.position.z = cameraRadius * Math.cos(0.125 * elapsedTime)
+    camera.rotation.y = .125 * elapsedTime
+        
     // Render
     renderer.render(scene, camera)
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
 }
-
 tick()
