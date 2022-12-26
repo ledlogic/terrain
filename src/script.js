@@ -31,17 +31,14 @@ const material = new THREE.MeshStandardMaterial({
 	color: 'gray',
 	map: textureImg,
 	displacementMap: heightImg,
-	displacementScale: -0.5,
-	alphaMap: alphaImg,
-	alphaScale: 1,
-	transparent: true,
-	depthTest: false
+	displacementScale: 0.5,
+	depthTest: true
 })
 
 // Mesh
 const planeMesh = new THREE.Mesh(geometry, material);
 scene.add(planeMesh);
-planeMesh.rotation.x = 181
+planeMesh.rotation.x = -Math.PI/2
 
 // Lights
 const pointLight = new THREE.PointLight('#dcdcff', 2)
@@ -72,27 +69,55 @@ window.addEventListener('resize', () => {
 
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.y = 0.1
-camera.rotation.y = 0.25
+camera.position.y = 1
 scene.add(camera)
 
 // Renderer
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas,
-	alpha: true
+    canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+// Cylinder
+var gridMin = -1.4 
+var gridMax = 1.4
+var gridDelta = 0.2
+var vector = new THREE.Vector3(0, 0, -1)
+for (var x=gridMin;x<gridMax;x+=gridDelta) {
+	for (var z=gridMin;z<gridMax;z+=gridDelta) {
+		const cylinderGeometry = new THREE.CylinderGeometry( 0.01, 0.01, 0.05, 20 );
+		const cylinderMaterial = new THREE.MeshStandardMaterial( {color: 'gray'} );
+		const cylinderMesh = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
+		cylinderMesh.position.x = x
+		cylinderMesh.position.y = 0.5
+		cylinderMesh.position.z = z
+		
+		// fix y positions.
+		/*
+		var raycaster = new THREE.Raycaster();
+		raycaster.set(cylinderMesh.position, vector);
+		var velocity = new THREE.Vector3();
+		var intersects = raycaster.intersectObject(planeMesh);
+		if (intersects.length) {
+			var d = intersects[0].distance;
+			//cylinderMesh.translateY(-d);
+		}
+		*/
+		scene.add(cylinderMesh);
+	}
+}
+
 // Clock
-let cameraRadius = 1.5
+let cameraRadius = 3
 const clock = new THREE.Clock()
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 	
-    camera.position.x = cameraRadius * Math.sin(0.125 * elapsedTime)
-    camera.position.z = cameraRadius * Math.cos(0.125 * elapsedTime)
-    camera.rotation.y = .125 * elapsedTime
+	var t = 0.125 * elapsedTime
+    camera.position.x = cameraRadius * Math.sin(t)
+    camera.position.z = cameraRadius * Math.cos(t)
+    camera.rotation.y = t
         
     // Render
     renderer.render(scene, camera)
