@@ -1,4 +1,7 @@
-# Three.js Starter
+# Oghma simulator
+A simulator to see how many security station officers could handle oghma intruders as in the Traveller published scenario, [Makergod](https://wiki.travellerrpg.com/Makergod).
+
+#@ Three.js Starter
 Courtesy of Bruno Simon of https://threejs-journey.xyz/
 
 ## Setup
